@@ -1,28 +1,19 @@
-##Please submit all pull requests to the [develop branch](https://github.com/AHAAAAAAA/PokemonGo-Map/tree/develop) #
+Very not done yet.  
 
-#[Official Twitter] (https://twitter.com/PoGoMDev) Please give us a follow or contact.
-#[Official Website] (https://jz6.github.io/PoGoMap/)#
+lots to clean up.  
 
-<p align="center">
-<img src="https://raw.githubusercontent.com/AHAAAAAAA/PokemonGo-Map/master/static/cover.png">
-</p>
+cobbled together from a bunch of different scripts until I have time to rewrite in a clean way.
 
-# PokemonGo Map
+# example;
 
-[![Build Status](https://travis-ci.org/AHAAAAAAA/PokemonGo-Map.svg?branch=master)](https://travis-ci.org/AHAAAAAAA/PokemonGo-Map) [![Coverage Status](https://coveralls.io/repos/github/AHAAAAAAA/PokemonGo-Map/badge.svg?branch=master)](https://coveralls.io/github/AHAAAAAAA/PokemonGo-Map?branch=master) ![Python 2.7](https://img.shields.io/badge/python-2.7-blue.svg)
+`python slack-notifier.py -a google -u {email} -p {password} -l "30.300067, -97.696347" -st 3`
 
-#[Official Website] (https://jz6.github.io/PoGoMap/)#
-#[Official Twitter] (https://twitter.com/PoGoMDev)#
+ - a = auth source. `google` to `ptc`
+ - u = username
+ - p = password
+ - l "Austin" = location coordinates for google.
+ - st = steps to travel from start location.  hunt range.
 
-[Android Port](https://github.com/omkarmoghe/Pokemap)
+# environment .env file
 
-[Video Setup Tutorial](https://www.youtube.com/watch?v=nplNFl3SpOI)
-
-Live map visualization of all pokemon in your area with options to also show gyms, filter pokemon, localization, and pokestops. This is a proof of concept. Currently runs on a Flask server displaying a custom Google Map with markers on it.
-
-Using this software is against the ToS and can get you banned. Use at your own risk.
-
-Building off [Mila432](https://github.com/Mila432/Pokemon_Go_API)'s PokemonGo API, [tejado's additions](https://github.com/tejado/pokemongo-api-demo), [leegao's additions](https://github.com/leegao/pokemongo-api-demo/tree/simulation) and [Flask-GoogleMaps](https://github.com/rochacbruno/Flask-GoogleMaps).
-
----
-#For instructions, please refer to [the wiki](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki)#
+    SLACK_WEBHOOK_URL={your slack webhook URI}
