@@ -575,13 +575,13 @@ def login(args):
     creation_time = \
         datetime.fromtimestamp(int(profile.profile.creation_time)
                                / 1000)
-    print '[+] You started playing Pokemon Go on: {}'.format(
+    print '[+] You started playing Pokémon Go on: {}'.format(
         creation_time.strftime('%Y-%m-%d %H:%M:%S'))
 
     for curr in profile.profile.currency:
         print '[+] {}: {}'.format(curr.type, curr.amount)
     os.system('clear')
-    print('Hunting for those rare pokemon... check the map in the meantime for all other Pokemon locations.')
+    print('Hunting for those rare Pokémon... check the map in the meantime for all other Pokémon locations.')
     return api_endpoint, access_token, profile_response
 
 def main():
@@ -598,6 +598,9 @@ def main():
     print('[+] Locale is ' + args.locale)
     pokemonsJSON = json.load(
         open(path + '/locales/pokemon.' + args.locale + '.json'))
+
+    iconsJSON = json.load(
+        open(path + '/icons.json'))
 
     if args.debug:
         global DEBUG
@@ -649,7 +652,7 @@ def main():
         (x, y) = (x + dx, y + dy)
 
         process_step(args, api_endpoint, access_token, profile_response,
-                     pokemonsJSON, ignore, only)
+                     pokemonsJSON, iconsJSON, ignore, only)
 
         #print('Completed: ' + str(
             #((step+1) + pos * .25 - .25) / (steplimit2) * 100) + '%')
@@ -667,7 +670,7 @@ def main():
     register_background_thread()
 
 
-def process_step(args, api_endpoint, access_token, profile_response, pokemonsJSON, ignore, only):
+def process_step(args, api_endpoint, access_token, profile_response, pokemonsJSON, iconsJSON, ignore, only):
     #print('[+] Searching pokemons for location {} {}'.format(FLOAT_LAT, FLOAT_LONG))
     origin = LatLng.from_degrees(FLOAT_LAT, FLOAT_LONG)
     step_lat = FLOAT_LAT
@@ -712,6 +715,7 @@ def process_step(args, api_endpoint, access_token, profile_response, pokemonsJSO
 
     for poke in visible:
         pokename = pokemonsJSON[str(poke.pokemon.PokemonId)]
+        pokeicon = iconsJSON[str(poke.pokemon.PokemonId)]
         if args.ignore:
             if pokename.lower() in ignore:
                 continue
@@ -734,6 +738,7 @@ def process_step(args, api_endpoint, access_token, profile_response, pokemonsJSO
             "id": poke.pokemon.PokemonId,
             "name": pokename
         }
+
         if str(poke.pokemon.PokemonId) in notificationPokemon: #If the current Pokemon is inside the notificationPokemon list.
             curPokemonHash = hashlib.md5(str((poke.pokemon.PokemonId))+str((poke.Latitude))+str((poke.Longitude))).hexdigest() #create the hash (id + lat + long MD5'd)
             secondsToDeath = poke.TimeTillHiddenMs / 1000
@@ -741,11 +746,20 @@ def process_step(args, api_endpoint, access_token, profile_response, pokemonsJSO
                 calledLocations[str(curPokemonHash)] = disappear_timestamp # add to called list
                 if int(secondsToDeath) > 200:
                     minutes = round(int(secondsToDeath)/60)
-                    message = str(":pokeball: "+pokename+" with "+str(minutes)+" minutes remaining. <http://www.google.com/maps/place/")+str((poke.Latitude))+str(",")+str((poke.Longitude))+"| Google Map> "+" <https://maps.googleapis.com/maps/api/staticmap?center="+str((poke.Latitude))+str(",")+str((poke.Longitude))+\
-                    "&zoom=18&size=600x300&maptype=roadmap&markers=color:red%7Clabel:P%7C"+str((poke.Latitude))+str(",")+str((poke.Longitude))+"|Image Link>"
+                    message = ':pokeball: A wild {0} appeared! There are {1} minutes remaining.'.format(pokename, minutes)
+                    'http://maps.googleapis.com/maps/api/staticmap?center=26.011151,-80.399364&zoom=18&format=png&sensor=false&size=x480&maptype=roadmap'
+                    icon = 'https://maps.googleapis.com/maps/api/staticmap?format=png32&zoom=17&size=400x300&&style=feature:administrative|visibility:off&style=feature:landscape.man_made|element:geometry.fill|color:0x89ff82&style=feature:landscape.man_made|element:labels|visibility:off&style=feature:poi|visibility:simplified&style=feature:poi|element:labels|visibility:off&style=feature:road|element:geometry.fill|color:0x808080&style=feature:road|element:geometry.stroke|color:0xedfe91&style=feature:road|element:labels|visibility:off&style=feature:transit|visibility:off&style=feature:water|element:geometry|color:0x1a8bd9&style=feature:water|element:labels|visibility:off&style=feature:poi.park|color:0x03a286&style=feature:poi&markers=icon:{0}|{1},{2}'.format(pokeicon, poke.Latitude, poke.Longitude)
                     print message
                     url = os.environ.get("SLACK_WEBHOOK_URL")
-                    payload = {'text':message}
+                    payload = {
+                        'username': 'Professor Oak',
+                        'icon_url': 'http://i.imgur.com/agMDD9N.png',
+                        'text': message,
+                        'attachments': [{
+                            'fallback': '{0}, {1}'.format(poke.Latitude, poke.Longitude),
+                            'image_url': icon
+                        }]
+                    }
                     headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
                     r = requests.post(url, data=json.dumps(payload), headers=headers)
 
@@ -765,7 +779,7 @@ def clear_stale_pokemons():
 
 def register_background_thread(initial_registration=False):
     """
-    Start a background thread to search for Pokemon
+    Start a background thread to search for Pokémon
     while Flask is still able to serve requests for the map
     :param initial_registration: True if first registration and thread should start immediately, False if it's being called by the finishing thread to schedule a refresh
     :return: None
