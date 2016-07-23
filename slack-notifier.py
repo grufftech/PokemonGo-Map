@@ -747,7 +747,7 @@ def process_step(args, api_endpoint, access_token, profile_response, pokemonsJSO
                 if int(secondsToDeath) > 200:
                     minutes = round(int(secondsToDeath)/60)
                     message = ':pokeball: A wild {0} appeared! There are {1} minutes remaining.'.format(pokename, minutes)
-                    'http://maps.googleapis.com/maps/api/staticmap?center=26.011151,-80.399364&zoom=18&format=png&sensor=false&size=x480&maptype=roadmap'
+                    'http://maps.googleapis.com/maps/api/staticmap?center=26.011151,-80.399364&zoom=18&format=png32&sensor=false&size=x480&maptype=roadmap'
                     icon = 'https://maps.googleapis.com/maps/api/staticmap?format=png32&zoom=17&size=400x300&&style=feature:administrative|visibility:off&style=feature:landscape.man_made|element:geometry.fill|color:0x89ff82&style=feature:landscape.man_made|element:labels|visibility:off&style=feature:poi|visibility:simplified&style=feature:poi|element:labels|visibility:off&style=feature:road|element:geometry.fill|color:0x808080&style=feature:road|element:geometry.stroke|color:0xedfe91&style=feature:road|element:labels|visibility:off&style=feature:transit|visibility:off&style=feature:water|element:geometry|color:0x1a8bd9&style=feature:water|element:labels|visibility:off&style=feature:poi.park|color:0x03a286&style=feature:poi&markers=icon:{0}|{1},{2}'.format(pokeicon, poke.Latitude, poke.Longitude)
                     print message
                     url = os.environ.get("SLACK_WEBHOOK_URL")
