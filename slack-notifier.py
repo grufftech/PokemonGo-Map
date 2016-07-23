@@ -20,8 +20,6 @@ import pokemon_pb2
 import time
 import hashlib
 import ctypes
-import requests
-import json
 from google.protobuf.internal import encoder
 from google.protobuf.message import DecodeError
 from s2sphere import *
