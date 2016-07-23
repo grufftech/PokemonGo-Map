@@ -753,7 +753,7 @@ def process_step(args, api_endpoint, access_token, profile_response, pokemonsJSO
                     url = os.environ.get("SLACK_WEBHOOK_URL")
                     payload = {
                         'username': 'Professor Oak',
-                        'icon_url': 'http://i.imgur.com/agMDD9N.png',
+                        'icon_url': 'http://i.imgur.com/zkuUCrq.png',
                         'text': message,
                         'attachments': [{
                             'fallback': '{0}, {1}'.format(poke.Latitude, poke.Longitude),
