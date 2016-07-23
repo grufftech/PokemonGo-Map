@@ -6,13 +6,15 @@ lots to clean up.
 
 cobbled together from a bunch of different scripts until I have time to rewrite in a clean way.
 
-# install
+# install on ubuntu;
 
-needs pythong 2.7 & pip.
+`sudo apt-get install libffi-dev libssl-dev`
+
+needs python 2.7 & pip.
 
 `pip install -r requirements.txt`
 
-should take care of deps. 
+should take care of deps.
 
 # example;
 
